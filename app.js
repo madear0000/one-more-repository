@@ -1,48 +1,82 @@
-const buttonForNewProduct = document.getElementById("newProduct");
-const areaForAdd = document.getElementById("addNew");
-const addElementProduct = document.getElementById("forProdcuts");
-const buttonForDeleteAll = document.getElementById("deleteAll");
-let count = 0;
+/**
+ * @typedef Product
+ * @property {number} id
+ * @property {string} name
+ */
+
+const addNewProductButton = document.getElementById("addNewProductButton");  
+const deleteAllProductsButton = document.getElementById("deleteAllProductsButton");  
+const productsList = document.getElementById("productsList");  
+const inputForAddProducts = document.getElementById("addNew");  
+
+
 // let allProducts;
 
-function addElement(name, count) {
-    return `
-    <div class="product d-flex rounded mt-3" id=${count}>
-                <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index=${count}> 
-                <label for="check" class="ms-2">${name}</label>       
-    </div>`
+let productList = new Map();
+let productIdcounter = 0;
+
+/**
+ *
+ * @param {Product} product
+ * @return {string}
+ */
+const productTemplate = (product) => `
+            <div class="product d-flex rounded mt-3" id=${product.id}>
+                <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index=${product.id}>
+                <label for="check" class="ms-2">${product.name}</label>
+                <button type="button" class="btn btn-danger remove-product" id="deleteOneProduct" data-id=${product.id}></button>
+            </div>
+`.trim()
+
+function rerender() {
+    const html = Array.from(productList.values()).map(product => productTemplate(product)).join('\n');
+
+    productsList.innerHTML = html;
+
+    inputForAddProducts.value = "";
+
+    const deleteOneProductButton = document.querySelectorAll(".remove-product");
+
+    deleteOneProductButton.forEach((button) => {
+        button.addEventListener('click', () => {
+            removeProduct(button.getAttribute('data-id'));
+        });
+    });    
+}
+/**
+ *
+ * @param {Product} product
+ */
+function addProduct(product) {
+    productList.set(product.id, product);
+    rerender();
 }
 
+/**
+ *
+ * @param {string} id
+ */
+function removeProduct(id) {
+    productList.delete(Number(id));
+    rerender();
+}
 
-// addElementProduct.addEventListener('click', (block) => {
-//     if (block.target.dataset.index) {
-//         if (block.target.checked) {
-//             allProducts.forEach((oneProduct) => {
-//                 if (oneProduct.id == block.target.dataset.index) {
-//                     oneProduct.classList.add('product-done');
-//                 }
-//             })
-//         } else if (!block.target.checked) {
-//             allProducts.forEach((oneProduct) => {
-//                 if (oneProduct.id == block.target.dataset.index) {
-//                     oneProduct.classList.remove('product-done');
-//                 }
-//             })
-//         }
-//     }
-// });
+function removeAllProducts() {
+    productList.clear();
+    rerender();
+}
 
-buttonForNewProduct.addEventListener('click', () => {
-    if (areaForAdd.value != "") {
-        count++;
-        let nameProduct = areaForAdd.value
-        addElementProduct.insertAdjacentHTML('beforeend', addElement(nameProduct, count));
-        areaForAdd.value = "";
-        // allProducts = document.querySelectorAll(".product")
+addNewProductButton.addEventListener('click', () => {
+    const productName = inputForAddProducts.value
+    if (productName) {
+        const newProductObj = {
+            id: productIdcounter++,
+            name: productName
+        }
+        addProduct(newProductObj);
     }
-});
+})
 
-buttonForDeleteAll.addEventListener('click', () => {
-    document.querySelectorAll(".one-product").forEach(elem => elem.remove());
-});
-
+deleteAllProductsButton.addEventListener('click', () => {
+    removeAllProducts();
+})
