@@ -8,6 +8,7 @@ const addNewProductButton = document.getElementById("addNewProductButton");
 const deleteAllProductsButton = document.getElementById("deleteAllProductsButton");  
 const productsList = document.getElementById("productsList");  
 const inputForAddProducts = document.getElementById("addNew");  
+const validationAreaProduct = document.getElementById("validation");
 
 
 // let allProducts;
@@ -48,8 +49,19 @@ function generateProductId() {
     return productIdcounter++;
 }
 
+function validationNotPass() {
+    validationAreaProduct.style.opacity = "1";
+    validationAreaProduct.style.position = "relative";
+}
+
+
+function validationPass() {
+    validationAreaProduct.style.opacity = "0";
+    validationAreaProduct.style.position = "absolute";
+}
+
 function handleAddNewProductButtonClick() {
-    const name =inputForAddProducts.value.trim();
+    const name = inputForAddProducts.value.trim();
     
     if (name) {
       const id = generateProductId();
@@ -58,8 +70,11 @@ function handleAddNewProductButtonClick() {
         id,
         name
       })
+
+      validationPass();
+      
     } else {
-        alert("Введите пожалуйста продукт")
+       validationNotPass();
     }
   }
 
