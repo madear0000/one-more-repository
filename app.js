@@ -43,6 +43,27 @@ function rerender() {
         });
     });    
 }
+
+function generateProductId() {
+    return productIdcounter++;
+}
+
+function handleAddNewProductButtonClick() {
+    const name =inputForAddProducts.value.trim();
+    
+    if (name) {
+      const id = generateProductId();
+  
+      addProduct({
+        id,
+        name
+      })
+    } else {
+        alert("Введите пожалуйста продукт")
+    }
+  }
+
+
 /**
  *
  * @param {Product} product
@@ -67,14 +88,7 @@ function removeAllProducts() {
 }
 
 addNewProductButton.addEventListener('click', () => {
-    const productName = inputForAddProducts.value
-    if (productName) {
-        const newProductObj = {
-            id: productIdcounter++,
-            name: productName
-        }
-        addProduct(newProductObj);
-    }
+    handleAddNewProductButtonClick();
 })
 
 deleteAllProductsButton.addEventListener('click', () => {
