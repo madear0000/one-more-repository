@@ -70,8 +70,6 @@ function handleAddNewProductButtonClick() {
         id,
         name
       })
-
-      validationPass();
       
     } else {
        validationNotPass();
@@ -101,6 +99,11 @@ function removeAllProducts() {
     productList.clear();
     rerender();
 }
+inputForAddProducts.addEventListener('keyup', () => {
+    if (inputForAddProducts.value.trim() != "") {
+        validationPass();
+    }
+})
 
 addNewProductButton.addEventListener('click', () => {
     handleAddNewProductButtonClick();
