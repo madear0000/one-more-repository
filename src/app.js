@@ -4,6 +4,7 @@
  * @property {string} name
  */
 
+
 const headForStyle = document.getElementsByTagName('head')[0];
 const deleteAllProductsButton = document.getElementById("deleteAllProductsButton");  
 const productsList = document.getElementById("productsList");  
@@ -14,7 +15,7 @@ const formToAddProducts = document.getElementById('form-to-add-products');
 // let allProducts;
 
 let productList = new Map();
-let productIdcounter = 0;
+let productIdcounter = 1;
 
 /**
  *
@@ -24,7 +25,7 @@ let productIdcounter = 0;
 const productTemplate = (product) => `
             <div class="product d-flex rounded mt-3" id=${product.id}>
                 <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index=${product.id}>
-                <label for="check" class="ms-2">${product.name}</label>
+                <label for="check" class="ms-2 productLabel">${product.name}</label>
                 <button type="button" class="btn btn-danger remove-product" id="deleteOneProduct" data-id=${product.id}></button>
             </div>
 `.trim()
@@ -110,6 +111,7 @@ function handleAddNewProductButtonClick() {
  */
 function addProduct(product) {
     productList.set(product.id, product);
+    localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
     rerender();
 }
 
@@ -119,12 +121,25 @@ function addProduct(product) {
  */
 function removeProduct(id) {
     productList.delete(Number(id));
+    localStorage.removeItem(`product-${id}`);
     rerender();
 }
 
 function removeAllProducts() {
     productList.clear();
+    localStorage.clear();
     rerender();
+}
+
+function loadProductsFromLocalStorage() {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('product-')) {
+        const productString = localStorage.getItem(key);
+        const product = JSON.parse(productString);
+        addProduct(product);
+      }
+    }
 }
 
 formToAddProducts.addEventListener('submit', (event) => {
@@ -141,3 +156,7 @@ inputForAddProducts.addEventListener('keyup', () => {
 deleteAllProductsButton.addEventListener('click', () => {
     removeAllProducts();
 })
+
+window.addEventListener('load', () => {
+    loadProductsFromLocalStorage();
+});
