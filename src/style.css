@@ -48,10 +48,6 @@ input :active, :hover, :focus {
     padding-right: 10px;
 }
 
-.product-done {
-    text-decoration: line-through;
-}
-
 input[type="checkbox"]:checked+label { 
     text-decoration: line-through;
  }
