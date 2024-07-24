@@ -36,13 +36,17 @@ function rerender() {
 
     inputForAddProducts.value = "";
 
+     removeOnePointProduct();
+}
+
+function removeOnePointProduct() {
     const deleteOneProductButton = document.querySelectorAll(".remove-product");
 
     deleteOneProductButton.forEach((button) => {
         button.addEventListener('click', () => {
             removeProduct(button.getAttribute('data-id'));
         });
-    });    
+    });   
 }
 
 function generateProductId() {
@@ -99,6 +103,7 @@ function removeAllProducts() {
     productList.clear();
     rerender();
 }
+
 inputForAddProducts.addEventListener('keyup', () => {
     if (inputForAddProducts.value.trim() != "") {
         validationPass();
