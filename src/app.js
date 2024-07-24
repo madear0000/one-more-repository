@@ -4,12 +4,12 @@
  * @property {string} name
  */
 
-const addNewProductButton = document.getElementById("addNewProductButton");  
+const headForStyle = document.getElementsByTagName('head')[0];
 const deleteAllProductsButton = document.getElementById("deleteAllProductsButton");  
 const productsList = document.getElementById("productsList");  
 const inputForAddProducts = document.getElementById("addNew");  
 const validationAreaProduct = document.getElementById("validation");
-
+const formToAddProducts = document.getElementById('form-to-add-products');
 
 // let allProducts;
 
@@ -38,6 +38,29 @@ function rerender() {
 
      removeOnePointProduct();
 }
+
+
+
+//to Styles
+function addBootstrapScssToHTML() {
+    let link  = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.href = 'src/main.scss';
+    headForStyle.appendChild(link);
+}
+
+function addCssToHTML() {
+    let link  = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.href = 'src/style.css';
+    headForStyle.appendChild(link);
+}
+
+addBootstrapScssToHTML();
+addCssToHTML();
+//
+
+
 
 function removeOnePointProduct() {
     const deleteOneProductButton = document.querySelectorAll(".remove-product");
@@ -104,14 +127,15 @@ function removeAllProducts() {
     rerender();
 }
 
+formToAddProducts.addEventListener('submit', (event) => {
+    handleAddNewProductButtonClick();
+    event.preventDefault();
+})
+
 inputForAddProducts.addEventListener('keyup', () => {
     if (inputForAddProducts.value.trim() != "") {
         validationPass();
     }
-})
-
-addNewProductButton.addEventListener('click', () => {
-    handleAddNewProductButtonClick();
 })
 
 deleteAllProductsButton.addEventListener('click', () => {

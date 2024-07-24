@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/main.scss">
-    <link rel="stylesheet" href="src/style.css">
     <script src="src/app.js" defer></script>
     <title>Document</title>
 </head>
 <body>
     <div class="container">
         <h1 class="text-light mt-5 ">Список покупок</h1>
-        <form action="submit">
+        <form action="submit" id="form-to-add-products">
             <input type="text" placeholder="Название продукта" id="addNew" class="rounded">
             <p class="text-danger mt-2 validation" id="validation"> &#9746; Пожалуйста введите продукт</p>     
             <div class="buttons d-flex justify-content-between mt-3">
-                <button type="button" class="btn btn-primary top-buttons" id="addNewProductButton">Добавить</button>
+                <button type="submit" class="btn btn-primary top-buttons" id="addNewProductButton">Добавить</button>
                 <button type="button" class="btn btn-danger top-buttons" id="deleteAllProductsButton">Удалить все</button>
             </div>
         </form>
