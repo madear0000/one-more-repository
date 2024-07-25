@@ -48,6 +48,7 @@ export default function setupProductList() {
     }
     
     function generateProductId() {
+        console.log(productIdcounter);
         return productIdcounter++;
     }
     
@@ -79,6 +80,18 @@ export default function setupProductList() {
         }
       }
     
+    function saveProductstoCache(product) {
+        localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
+    }
+
+    function removeProductsFromCache(id) {
+        localStorage.removeItem(`product-${id}`);
+    }
+
+    function removeAllProductsFromCache() {
+        localStorage.clear();
+        productIdcounter = 1;
+    }
     
     /**
      *
@@ -87,7 +100,7 @@ export default function setupProductList() {
     
     function addProduct(product) {
             productList.set(product.id, product);
-            localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
+            saveProductstoCache(product);
             rerender();
     }
     
@@ -97,30 +110,29 @@ export default function setupProductList() {
      */
     function removeProduct(id) {
         productList.delete(Number(id));
-        localStorage.removeItem(`product-${id}`);
+        removeProductsFromCache(id);
         rerender();
     }
     
     function removeAllProducts() {
         productList.clear();
-        localStorage.clear();
-        productIdcounter = 1;
+        removeAllProductsFromCache();
         rerender();
     }
     
     function checkboxTextDerectionLineThrough(block) {
-        if (block.target.type == "checkbox" && block.target.checked) {
+        if (block.target.checked) {
             productList.forEach((value, key) => {
                 if (Number(block.target.dataset.index) == key) {
-                   value.check = true;
-                   localStorage.setItem(`product-${key}`, JSON.stringify(value));
+                    value.check = true;
+                    localStorage.setItem(`product-${key}`, JSON.stringify(value));
                 }
             })
-        } else if(block.target.type == "checkbox" && !block.target.checked) {
-            productList.forEach((value, key, map) => {
+        } else if(!block.target.checked) {
+            productList.forEach((value, key) => {
                 if (Number(block.target.dataset.index) == key) {
-                   value.check = false;
-                   localStorage.setItem(`product-${key}`, JSON.stringify(value));
+                    value.check = false;
+                    localStorage.setItem(`product-${key}`, JSON.stringify(value));
                 }
             })
         }
@@ -136,9 +148,14 @@ export default function setupProductList() {
             const product = JSON.parse(productString);
             checkId.push(product.id);
             addProduct(product);
+            
           }
         }
         productIdcounter = Math.max.apply(null, checkId) + 1;
+        if (productIdcounter == -Infinity) {
+            productIdcounter = 1;
+        }
+        console.log(checkId);
     }
     
     formToAddProducts.addEventListener('submit', (event) => {
