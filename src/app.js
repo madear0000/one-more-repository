@@ -53,15 +53,7 @@ function addBootstrapScssToHTML() {
     headForStyle.appendChild(link);
 }
 
-function addCssToHTML() {
-    let link  = document.createElement('link');
-    link.rel  = 'stylesheet';
-    link.href = 'src/style.css';
-    headForStyle.appendChild(link);
-}
-
 addBootstrapScssToHTML();
-addCssToHTML();
 //
 
 
@@ -77,6 +69,7 @@ function removeOnePointProduct() {
 }
 
 function generateProductId() {
+    console.log(productIdcounter);
     return productIdcounter++;
 }
 
@@ -115,11 +108,9 @@ function handleAddNewProductButtonClick() {
  */
 
 function addProduct(product) {
-    if (!productList.has(product.id)) {
         productList.set(product.id, product);
         localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
         rerender();
-    }
 }
 
 /**
@@ -135,6 +126,7 @@ function removeProduct(id) {
 function removeAllProducts() {
     productList.clear();
     localStorage.clear();
+    productIdcounter = 1;
     rerender();
 }
 
@@ -158,18 +150,18 @@ function checkboxTextDerectionLineThrough(block) {
 }
 
 function loadProductsFromLocalStorage() {
+    let checkId = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.startsWith('product-')) {
         const productString = localStorage.getItem(key);
         const product = JSON.parse(productString);
-        if (!productList.has(product.id)) {
-            addProduct(product);
-        }
+        checkId.push(product.id);
+        addProduct(product);
       }
     }
+    productIdcounter = Math.max.apply(null, checkId) + 1;
 }
-
 
 formToAddProducts.addEventListener('submit', (event) => {
     handleAddNewProductButtonClick();
