@@ -1,3 +1,5 @@
+import './main.scss';
+
 /**
  * @typedef Product
  * @property {number} id
@@ -5,8 +7,6 @@
  * @property {boolean} check
  */
 
-
-const headForStyle = document.getElementsByTagName('head')[0];
 const deleteAllProductsButton = document.getElementById("deleteAllProductsButton");  
 const productsList = document.getElementById("productsList");  
 const inputForAddProducts = document.getElementById("addNew");  
@@ -27,7 +27,7 @@ let productIdcounter = 1;
 const productTemplate = (product) => `
             <div class="product d-flex rounded mt-3" id=${product.id}>
                 <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index=${product.id} ${product.check ? "checked" : ''}>
-                <label for="check" class="ms-2 ${product.check ? 'text-decoration-line-through' : ''}">${product.name}</label>
+                <label for="check" class="ms-2} name">${product.name}</label>
                 <button type="button" class="btn btn-danger remove-product" id="deleteOneProduct" data-id=${product.id}></button>
             </div>
 `.trim()
@@ -43,21 +43,6 @@ function rerender() {
 
 }
 
-
-
-//to Styles
-function addBootstrapScssToHTML() {
-    let link  = document.createElement('link');
-    link.rel  = 'stylesheet';
-    link.href = 'src/main.scss';
-    headForStyle.appendChild(link);
-}
-
-addBootstrapScssToHTML();
-//
-
-
-
 function removeOnePointProduct() {
     const deleteOneProductButton = document.querySelectorAll(".remove-product");
 
@@ -69,7 +54,6 @@ function removeOnePointProduct() {
 }
 
 function generateProductId() {
-    console.log(productIdcounter);
     return productIdcounter++;
 }
 

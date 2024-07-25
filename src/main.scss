@@ -41,6 +41,10 @@ input :active, :hover, :focus {
     position: absolute;
 }
 
+.name {
+    margin-left: 10px;
+}
+
 .product {
     padding-top: 12px;
     width: 500px;
@@ -50,3 +54,6 @@ input :active, :hover, :focus {
     padding-right: 10px;
 }
 
+input[type="checkbox"]:checked+label { 
+    text-decoration: line-through;
+ }
