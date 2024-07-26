@@ -25,8 +25,7 @@ export default function setupProductList() {
                 <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index=${product.id} ${product.check ? "checked" : ''}>
                 <label for="check" class="ms-2} name">${product.name}</label>
                 <button type="button" class="btn btn-danger remove-product" id="deleteOneProduct" data-id=${product.id}></button>
-            </div>
-`.trim()
+            </div>`.trim()
 
     function rerender() {
         const html = Array.from(productList.values()).map(product => productTemplate(product)).join('\n');
