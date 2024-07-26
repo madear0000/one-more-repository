@@ -5,6 +5,7 @@ export default function setupProductList() {
     const inputForAddProducts = document.getElementById("addNew");  
     const validationAreaProduct = document.getElementById("validation");
     const formToAddProducts = document.getElementById('form-to-add-products');
+    const localStorageKey = 'productList';
     let check = false;
 
 
@@ -78,45 +79,33 @@ export default function setupProductList() {
         }
       }
     
-    function saveProductstoCache(product) {
-        localStorage.setItem(`product-${product.id}`, JSON.stringify(product));
+      function addProduct(product) {
+        productList.set(product.id, product);
+        saveProductsToCache();
+        rerender();
+    }
+
+    function removeProduct(id) {
+        productList.delete(Number(id));
+        saveProductsToCache();
+        rerender();
+    }
+
+    function saveProductsToCache() {
+        localStorage.setItem(localStorageKey, JSON.stringify(Array.from(productList.entries())));
     }
 
     function removeProductsFromCache(id) {
-        localStorage.removeItem(`product-${id}`);
+        productList.delete(Number(id));
+        saveProductsToCache();
     }
 
-    function removeAllProductsFromCache() {
-        localStorage.clear();
-        productIdcounter = 1;
-    }
-    
-    /**
-     *
-     * @param {Product} product
-     */
-    
-    function addProduct(product) {
-            productList.set(product.id, product);
-            saveProductstoCache(product);
-            rerender();
-    }
-    
-    /**
-     *
-     * @param {string} id
-     */
-    function removeProduct(id) {
-        productList.delete(Number(id));
-        removeProductsFromCache(id);
-        rerender();
-    }
-    
     function removeAllProducts() {
         productList.clear();
-        removeAllProductsFromCache();
+        saveProductsToCache();
         rerender();
     }
+
     
     function checkboxTextDerectionLineThrough(block) {
         if (block.target.checked) {
@@ -138,23 +127,16 @@ export default function setupProductList() {
     }
     
     function loadProductsFromLocalStorage() {
-        let checkId = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key.startsWith('product-')) {
-            const productString = localStorage.getItem(key);
-            const product = JSON.parse(productString);
-            checkId.push(product.id);
-            addProduct(product);
-            
-          }
+        const storedProducts = localStorage.getItem(localStorageKey);
+        if (storedProducts) {
+            const productsArray = JSON.parse(storedProducts);
+            productList = new Map(productsArray);
+            productIdcounter = Math.max(0, ...Array.from(productList.keys())) + 1;
         }
-        productIdcounter = Math.max.apply(null, checkId) + 1;
-        if (productIdcounter == -Infinity) {
-            productIdcounter = 1;
-        }
+        rerender();
     }
-    
+
+          
     formToAddProducts.addEventListener('submit', (event) => {
         event.preventDefault();
         handleAddNewProductButtonClick();

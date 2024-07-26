@@ -14,8 +14,7 @@ function mainLayoutBody() {
     </div>`.trim();
 }
 
-export default function appLayout() {
-    const body = document.getElementsByTagName('body')[0];
+export default function mainLayout() {
+    const body = document.getElementById('root');
     body.innerHTML = mainLayoutBody();
-    
 }
