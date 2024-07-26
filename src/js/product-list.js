@@ -47,7 +47,6 @@ export default function setupProductList() {
     }
     
     function generateProductId() {
-        console.log(productIdcounter);
         return productIdcounter++;
     }
     
@@ -154,7 +153,6 @@ export default function setupProductList() {
         if (productIdcounter == -Infinity) {
             productIdcounter = 1;
         }
-        console.log(checkId);
     }
     
     formToAddProducts.addEventListener('submit', (event) => {
