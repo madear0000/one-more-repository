@@ -34,6 +34,32 @@ input {
     margin-left: 420px;
 }
 
+.quantity {
+    background-color: white;
+    width: 100px;
+    margin-left: 400px;
+    height: 40px;
+}
+
+.quantity_button {
+    margin-left: 79px;
+}
+
+.button_for_quantiy {
+    font-size: 8px;
+    background-color: white;
+    position: absolute;
+}
+
+.quntity_text {
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+.down {
+    margin-top: 19px;
+}
+
 .validation {
     opacity: 0;
     position: absolute;

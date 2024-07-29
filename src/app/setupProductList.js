@@ -6,6 +6,10 @@ export default function setupProductList() {
     const validationAreaProduct = document.getElementById("validation");
     const formToAddProducts = document.getElementById('form-to-add-products');
     const localStorageKey = 'productList';
+    const quantityForUser = document.getElementById('quantityForUser');
+    const quantityUp = document.getElementById('quantityUp');
+    const quantityDown = document.getElementById('quantityDown');
+    let quantityNumber = 1;
     let check = false;
 
 
@@ -19,7 +23,6 @@ export default function setupProductList() {
      * @param {Product} product
      * @return {string}
  */
-
     
     const productTemplate = (product) => `
             <div class="product d-flex rounded mt-3" id=${product.id}>
@@ -46,6 +49,14 @@ export default function setupProductList() {
             });
         });   
     }
+
+    function outputToTheScreenQuntity() {
+        if (quantityNumber > 1) {
+            return ' x' + String(quantityNumber);
+        } else {
+            return '';
+        }
+    }
     
     function generateProductId() {
         return productIdcounter++;
@@ -61,9 +72,14 @@ export default function setupProductList() {
         validationAreaProduct.style.opacity = "0";
         validationAreaProduct.style.position = "absolute";
     }
+
+    function refreshQuantityNumber() {
+        quantityNumber = 1;
+        quantityForUser.textContent = "1";
+    }
     
     function handleAddNewProductButtonClick() {
-        const name = inputForAddProducts.value.trim();
+        const name = inputForAddProducts.value.trim() + outputToTheScreenQuntity();
         
         if (name) {
           const id = generateProductId();
@@ -81,6 +97,7 @@ export default function setupProductList() {
     
       function addProduct(product) {
         productList.set(product.id, product);
+        refreshQuantityNumber();
         saveProductsToCache();
         rerender();
     }
@@ -161,5 +178,27 @@ export default function setupProductList() {
     window.addEventListener('load', () => {
         loadProductsFromLocalStorage();
     });
+
+
+    //количество продуктов
+    function upQuantityNumber() {
+        quantityNumber++;
+        quantityForUser.textContent = quantityNumber;
+    }
+
+    function downQuatityNumber() {
+        if (quantityNumber > 1) {
+            quantityNumber--;
+            quantityForUser.textContent = quantityNumber;
+        }
+    }
+
+    quantityUp.addEventListener('click', () => {
+        upQuantityNumber();
+    })
+
+    quantityDown.addEventListener('click', () => {
+        downQuatityNumber();
+    })
     
 }
