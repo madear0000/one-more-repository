@@ -1,4 +1,4 @@
-function mainLayoutBody() { 
+function mainLayoutBody(): string {
     return `<div class="container">
     <h1 class="text-light mt-5 ">Список покупок</h1>
     <form action="submit" id="form-to-add-products">
@@ -24,7 +24,7 @@ function mainLayoutBody() {
 </div>`.trim();
 }
 
-export default function mainLayout() {
-    const body = document.getElementById('root');
+export default function mainLayout(): void {
+    const body = document.getElementById('root') as HTMLElement;
     body.innerHTML = mainLayoutBody();
 }
