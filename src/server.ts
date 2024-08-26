@@ -6,7 +6,6 @@ const port = 3023;
 
 
 app.use(express.static(path.join(__dirname, '..')));  
-app.use(express.static(path.join(__dirname, 'dist')));
 
 
 app.get('*', (req, res) => {
