@@ -24,7 +24,7 @@ export default function setupProductList(): void {
     const productTemplate = (product: Product): string => `
         <div class="product d-flex rounded mt-3" id="${product.id}">
             <input class="form-check-input" name="bought-products" type="checkbox" value="" data-index="${product.id}" ${product.check ? "checked" : ''}>
-            <label for="check" class="ms-2 name">${product.name}</label>
+            <label for="check" class="ms-2 name" id="product-name">${product.name}</label>
             <button type="button" class="btn btn-danger remove-product" id="deleteOneProduct" data-id="${product.id}"></button>
         </div>`.trim();
 
@@ -83,6 +83,7 @@ export default function setupProductList(): void {
         refreshQuantityNumber();
         saveProductsToCache();
         rerender();
+
     }
 
     function removeProduct(id: number): void {
