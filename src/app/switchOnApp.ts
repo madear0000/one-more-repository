@@ -8,11 +8,6 @@ import setupProductList from './setupProductList';
  * @property {string} name
  * @property {boolean} check
  */
-export type Product = {
-    id: number;
-    name: string;
-    check: boolean;
-};
 
 export default function switchOnApp(): void {
     mainLayout();

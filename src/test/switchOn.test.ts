@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { getByText, screen } from '@testing-library/dom';
+import '@testing-library/jest-dom';
 import switchOnApp from '../app/switchOnApp';
 
 describe('switchOnApp', () => {
@@ -7,10 +9,11 @@ describe('switchOnApp', () => {
   });
 
   it('should initialize the app layout and product list', () => {
-    switchOnApp();
-
     const rootElement = document.getElementById('root');
+    
+    switchOnApp();
+    
     expect(rootElement).toBeDefined();
-    expect(rootElement?.innerHTML).toContain('Список покупок');
+    expect(screen.getByText('Список покупок')).toBeInTheDocument();
   });
 });

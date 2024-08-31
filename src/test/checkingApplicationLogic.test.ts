@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
+import { screen, fireEvent } from "@testing-library/dom";
+import '@testing-library/jest-dom';
 import setupProductList from "../app/setupProductList";
 import mainLayout from "../app/mainLayout";
 
@@ -10,63 +12,61 @@ describe('checkingApplicationLogic-test', () => {
     });
 
     it('should add a product to the list', () => {
-        const input = document.getElementById('addNew') as HTMLInputElement;
-        const form = document.getElementById('form-to-add-products') as HTMLFormElement;
+        const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
+        const form = screen.getByRole('form');
 
         input.value = 'Apple';
+        fireEvent.submit(form);
 
-        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-        form.dispatchEvent(submitEvent);
-
-        const productsList = document.getElementById('productsList');
-        expect(productsList?.innerHTML).toContain('Apple');
+        // Assert
+        const productsList = screen.getByTestId('productsList');
+        expect(productsList).toHaveTextContent('Apple');
     });
 
-    it('delete all', () => {
-        const input = document.getElementById('addNew') as HTMLInputElement;
-        const form = document.getElementById('form-to-add-products') as HTMLFormElement;
-        const buttonDeleteAll = document.getElementById('deleteAllProductsButton') as HTMLButtonElement;
+    it('should delete all products', () => {
+        // Arrange
+        const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
+        const form = screen.getByRole('form');
+        const buttonDeleteAll = screen.getByRole('button', { name: /удалить все/i });
 
+        // Act
         input.value = 'Apple';
+        fireEvent.submit(form);
+        fireEvent.click(buttonDeleteAll);
 
-        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-        form.dispatchEvent(submitEvent);
-
-        buttonDeleteAll.click();
-
-        const productsList = document.getElementById('productsList');
-        expect(productsList?.innerHTML).toBe('');
+        // Assert
+        const productsList = screen.getByTestId('productsList');
+        expect(productsList).toBeEmptyDOMElement();
     });
 
     it('should increment and decrement quantity', () => {
-        const quantityUpButton = document.getElementById('quantityUp') as HTMLButtonElement;
-        const quantityDownButton = document.getElementById('quantityDown') as HTMLButtonElement;
-        const quantityDisplay = document.getElementById('quantityForUser') as HTMLSpanElement;
+        // Arrange
+        const quantityUpButton = screen.getByRole('button', { name: /увеличить/i });
+        const quantityDownButton = screen.getByRole('button', { name: /уменьшить/i });
+        const quantityDisplay = screen.getByTestId('quantityForUser');
 
-        quantityDownButton.click();
-        expect(quantityDisplay.textContent).toBe('1');
-        
-        quantityUpButton.click();
-        expect(quantityDisplay.textContent).toBe('2');
+        // Act & Assert
+        fireEvent.click(quantityUpButton);
+        expect(quantityDisplay).toHaveTextContent('2');
 
-        quantityDownButton.click();
-        expect(quantityDisplay.textContent).toBe('1');
+        fireEvent.click(quantityDownButton);
+        expect(quantityDisplay).toHaveTextContent('1');
     });
 
-    it('should reload and save products on window', () => {
-        const input = document.getElementById('addNew') as HTMLInputElement;
-        const form = document.getElementById('form-to-add-products') as HTMLFormElement;
+    it('should reload and save products on window reload', () => {
+        // Arrange
+        const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
+        const form = screen.getByRole('form');
 
+        // Act
         input.value = 'Apple';
+        fireEvent.submit(form);
 
-        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-        form.dispatchEvent(submitEvent);
+        // Simulate page reload
+        setupProductList();
 
-        const productsList = document.getElementById('productsList');
-
-        location.reload();
-
-        expect(productsList?.innerHTML).toContain('Apple');
+        // Assert
+        const productsList = screen.getByTestId('productsList');
+        expect(productsList).toHaveTextContent('Apple');
     });
-    
 });

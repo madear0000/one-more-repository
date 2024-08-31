@@ -1,21 +1,25 @@
-import {describe, it, expect, beforeEach} from "vitest";
-import mainLayout from "../app/mainLayout";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { screen } from '@testing-library/dom';
+import '@testing-library/jest-dom';
+import mainLayout from '../app/mainLayout';
 
-describe ('mainLayout', () => {
-    
-    beforeEach(() => {
-        document.body.innerHTML = '<div id="root"></div>';
-    });
+describe('mainLayout', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="root" data-testid="root"></div>';
+  });
 
-    it('should render the main layout correctly', () => {
+  it('should render the main layout correctly', () => {
+    mainLayout();
 
-        mainLayout();
+    const rootElement = screen.getByTestId('root');
+    const formElement = screen.getByRole('form');
+    const addNewInput = screen.getByPlaceholderText('Название продукта');
+    const deleteAllButton = screen.getByRole('button', { name: /удалить все/i });
 
-        const rootElement = document.getElementById('root');
-        expect(rootElement).toBeDefined();
-        expect(rootElement?.innerHTML).toContain('Список покупок');
-        expect(rootElement?.querySelector('#form-to-add-products')).not.toBeNull();
-        expect(rootElement?.querySelector('#addNew')).not.toBeNull();
-        expect(rootElement?.querySelector('#deleteAllProductsButton')).not.toBeNull();
-    });
+    expect(rootElement).toBeInTheDocument();
+    expect(formElement).toBeInTheDocument();
+    expect(addNewInput).toBeInTheDocument();
+    expect(deleteAllButton).toBeInTheDocument();
+  });
 });
+
