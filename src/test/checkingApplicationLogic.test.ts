@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { screen, fireEvent } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import '../../vitest.setup';
 import setupProductList from "../app/setupProductList";
 import mainLayout from "../app/mainLayout";
@@ -11,11 +12,11 @@ describe('checkingApplicationLogic-test', () => {
         setupProductList();
     });
 
-    it('should add a product to the list', () => {
+    it('should add a product to the list', async () => {
         const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
         const addButton = screen.getByRole('button', { name: /добавить/i })
 
-        input.value = 'Apple';
+        await userEvent.type(input, 'Apple');
         fireEvent.click(addButton);
 
         const productsList = screen.getByTestId('productsList');
