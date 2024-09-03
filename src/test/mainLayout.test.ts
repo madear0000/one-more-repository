@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/dom';
-import '@testing-library/jest-dom';
+import '../../vitest.setup';
 import mainLayout from '../app/mainLayout';
 
 describe('mainLayout', () => {

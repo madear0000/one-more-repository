@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { getByText, screen } from '@testing-library/dom';
-import '@testing-library/jest-dom';
+import '../../vitest.setup';
 import switchOnApp from '../app/switchOnApp';
 
 describe('switchOnApp', () => {
