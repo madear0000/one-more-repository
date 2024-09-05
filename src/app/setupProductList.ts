@@ -18,6 +18,8 @@ export default function setupProductList(): void {
     let quantityNumber = 1;
     let check = false;
 
+    alert('hello');
+
     let productList = new Map<number, Product>();
     let productIdCounter = 1;
 
