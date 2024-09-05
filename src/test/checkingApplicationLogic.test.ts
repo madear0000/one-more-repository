@@ -17,7 +17,7 @@ describe('checkingApplicationLogic-test', () => {
         const addButton = screen.getByRole('button', { name: /добавить/i })
 
         await userEvent.type(input, 'Apple');
-        fireEvent.click(addButton);
+        await userEvent.click(addButton);
 
         const productsList = screen.getByTestId('productsList');
         expect(productsList).toHaveTextContent('Apple');
