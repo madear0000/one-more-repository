@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import '../../vitest.setup';
 import setupProductList from "../app/setupProductList";
 import mainLayout from "../app/mainLayout";
+import { i } from "vite/dist/node/types.d-aGj9QkWt";
 
 describe('checkingApplicationLogic-test', () => {
     beforeEach(() => {
@@ -23,37 +24,37 @@ describe('checkingApplicationLogic-test', () => {
         expect(productsList).toHaveTextContent('Apple');
     });
 
-    it('should delete all products', () => {
+    it('should delete all products', async () => {
         const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
-        const form = screen.getByRole('form');
         const buttonDeleteAll = screen.getByRole('button', { name: /удалить все/i });
+        const addButton = screen.getByRole('button', { name: /добавить/i })
 
-        input.value = 'Apple';
-        fireEvent.submit(form);
-        fireEvent.click(buttonDeleteAll);
+        await userEvent.type(input, 'Apple');
+        await userEvent.click(addButton);
+        await userEvent.click(buttonDeleteAll);
 
         const productsList = screen.getByTestId('productsList');
         expect(productsList).toBeEmptyDOMElement();
     });
 
-    it('should increment and decrement quantity', () => {
+    it('should increment and decrement quantity', async () => {
         const quantityUpButton = screen.getByRole('button', { name: /увеличить/i });
         const quantityDownButton = screen.getByRole('button', { name: /уменьшить/i });
         const quantityDisplay = screen.getByTestId('quantityForUser');
 
-        fireEvent.click(quantityUpButton);
+        await userEvent.click(quantityUpButton)
         expect(quantityDisplay).toHaveTextContent('2');
 
-        fireEvent.click(quantityDownButton);
+        await userEvent.click(quantityDownButton)
         expect(quantityDisplay).toHaveTextContent('1');
     });
 
-    it('should reload and save products on window reload', () => {
+    it('should reload and save products on window reload', async () => {
         const input = screen.getByPlaceholderText('Название продукта') as HTMLInputElement;
-        const form = screen.getByRole('form');
+        const addButton = screen.getByRole('button', { name: /добавить/i })
 
-        input.value = 'Apple';
-        fireEvent.submit(form);
+        await userEvent.type(input, 'Apple');
+        await userEvent.click(addButton);
 
         setupProductList();
 
