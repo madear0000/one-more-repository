@@ -4,21 +4,37 @@ import React, { useState } from "react";
 import Product from "./Product"; 
 
 export default function Form() {
-    const [productList, setProductList] = useState([]);
+    const [productMap, setProductMap] = useState(new Map()); 
     const [product, setProduct] = useState("");
+    const [productIdCounter, setProductIdCounter] = useState(1);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (product.trim()) { 
-            setProductList([...productList, product]); 
+            const newProductMap = new Map(productMap); 
+            newProductMap.set(productIdCounter, product); 
+            setProductMap(newProductMap); 
+            setProductIdCounter(productIdCounter + 1); 
             setProduct(""); 
+            console.log(productMap);
         }
     };
 
     const deleteAll = () => {
-        setProductList([]);
-        console.log(productList);
-    }
+        setProductMap(new Map()); 
+        setProductIdCounter(1);
+    };
+
+    const deleteProduct = (valueToDelete) => {
+        const newProductMap = new Map(productMap); 
+        for (let [key, val] of newProductMap.entries()) {
+            if (val == valueToDelete) {
+                newProductMap.delete(key);
+                break;
+            }
+        }
+        setProductMap(newProductMap);
+    }   
 
     return (
         <>
@@ -40,10 +56,9 @@ export default function Form() {
                 </div>
             </form>
 
-
             <div className="pt-10">
-                {productList.map((item, index) => (
-                    <Product key={index} value={item} />
+                {[...productMap].map(([key, item]) => (
+                    <Product key={key} value={item} onDelete={deleteProduct}/>
                 ))}
             </div>
         </>

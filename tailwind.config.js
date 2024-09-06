@@ -38,6 +38,7 @@ module.exports = {
             foreground: "#ffffff",
           },
           secondary: "fffdd0",
+          success: "#008000",
           focus: "#F182F6",
         },
         layout: {
