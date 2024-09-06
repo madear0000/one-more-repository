@@ -16,7 +16,6 @@ export default function Form() {
             setProductMap(newProductMap); 
             setProductIdCounter(productIdCounter + 1); 
             setProduct(""); 
-            console.log(productMap);
         }
     };
 
