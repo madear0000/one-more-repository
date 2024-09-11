@@ -5,12 +5,17 @@ import { faCheck, faL } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
-export default function Product({ value, onDelete }) { 
+interface ProductProps {
+    value: string;
+    onDelete: (value: string) => void;
+    isBought: boolean;
+    onToggle: (value: string) => void; 
+}
 
-    const [isStrikeThrough, setisStrikeThrough] = useState(false);
+const Product: React.FC<ProductProps> = ({ value, onDelete, onToggle, isBought }) => { 
 
     const handleToggleStrikeThrough = () => {
-        setisStrikeThrough(!isStrikeThrough);
+        onToggle(value);
     }
 
     const deleteProduct = () => {
@@ -21,7 +26,7 @@ export default function Product({ value, onDelete }) {
         <Card>
             <CardBody>
                 <div className="flex justify-between items-center">
-                    <p style={{textDecoration: isStrikeThrough ? 'line-through' : ''}}>{value}</p>
+                    <p style={{textDecoration: isBought ? 'line-through' : ''}}>{value}</p>
                     <div>
                         <Button onClick={handleToggleStrikeThrough} size="sm" color="success" variant="flat">
                             <FontAwesomeIcon icon={faCheck} /> 
@@ -35,3 +40,5 @@ export default function Product({ value, onDelete }) {
         </Card>
     );
 }
+
+export default Product;
