@@ -1,13 +1,15 @@
-import Layout from "./components/Layout";
+import React from 'react';
+import Layout from './components/Layout';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="pt-10">
       <div className="container w-1/2">
         <Layout />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+

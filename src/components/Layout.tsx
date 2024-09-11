@@ -13,6 +13,7 @@ const Layout: React.FC = () => {
     
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log("Submitting form with product:");
         handleAddNewProductButtonClick(product);
     };
 
@@ -21,7 +22,7 @@ const Layout: React.FC = () => {
             <h1 className="text-5xl">
                 Shopping List
             </h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} role="form">
                 <Input
                     type="text"
                     label="Product"
