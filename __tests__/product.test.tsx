@@ -1,49 +1,54 @@
 import React from 'react'; 
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import Product from '../components/Product';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import Product from '../src/components/Product';
 
 describe('Product component', () => {
-    test('renders product correctly', () => {
+
+    afterEach(() => {
+        cleanup();
+    })
+
+    it('renders product correctly', () => {
         render(
             <Product 
                 value="Test Product" 
-                onDelete={jest.fn()} 
-                onToggle={jest.fn()} 
+                onDelete={vi.fn()} 
+                onToggle={vi.fn()} 
                 isBought={false} 
             />
         );
 
-        expect(screen.getByText('Test Product')).toBeInTheDocument();
+        expect(screen.getByText('Test Product')).not.toBeNull();
     });
 
-    test('toggles strike-through when clicked', async () => {
-        const handleToggle = jest.fn();
+    it('toggles strike-through when clicked', async () => {
+        const handleToggle = vi.fn();
 
         render(
             <Product 
                 value="Test Product" 
-                onDelete={jest.fn()} 
+                onDelete={vi.fn()} 
                 onToggle={handleToggle} 
                 isBought={false} 
             />
         );
 
-        const toggleButton = screen.getByTestId('toggle-button');
+        const toggleButton = screen.getAllByTestId('toggle-button')[0] as HTMLButtonElement;
         await userEvent.click(toggleButton);
 
         expect(handleToggle).toHaveBeenCalledWith('Test Product');
     });
 
-    test('deletes product when delete button is clicked', async () => {
-        const handleDelete = jest.fn();
+    it('deletes product when delete button is clicked', async () => {
+        const handleDelete = vi.fn();
 
         render(
             <Product 
                 value="Test Product" 
                 onDelete={handleDelete} 
-                onToggle={jest.fn()} 
+                onToggle={vi.fn()} 
                 isBought={false} 
             />
         );
@@ -54,17 +59,18 @@ describe('Product component', () => {
         expect(handleDelete).toHaveBeenCalledWith('Test Product');
     });
 
-    test('applies strike-through style when product is bought', () => {
+    it('applies strike-through style when product is bought', () => {
         render(
             <Product 
                 value="Test Product" 
-                onDelete={jest.fn()} 
-                onToggle={jest.fn()} 
+                onDelete={vi.fn()} 
+                onToggle={vi.fn()} 
                 isBought={true} 
             />
         );
 
         const productText = screen.getByText('Test Product');
-        expect(productText).toHaveStyle('text-decoration: line-through');
+        const style = getComputedStyle(productText);
+        expect(style.textDecoration).toBe('line-through');
     });
 });

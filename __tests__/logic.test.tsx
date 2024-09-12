@@ -1,36 +1,35 @@
 import React from 'react'; 
 import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import Layout from '../components/Layout';
+import { describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import Layout from '../src/components/Layout';
+import { useProducts } from '../src/hooks/useProduct';
 
-// Mock hook
-jest.mock('../hooks/useProduct', () => {
+vi.mock('../src/hooks/useProduct', () => {
     let productMap = new Map();
 
     return {
-        useProducts: jest.fn(() => ({
+        useProducts: () => ({
             productMap,
-            addProduct: jest.fn(),
-            deleteProduct: jest.fn(),
+            addProduct: vi.fn(),
+            deleteProduct: vi.fn(),
             validationNotPass: false,
-            deleteAll: jest.fn(() => {
+            deleteAll: vi.fn(() => {
                 productMap.clear();
             }),
-            handleAddNewProductButtonClick: jest.fn((product) => {
+            handleAddNewProductButtonClick: vi.fn((product) => {
                 productMap.set(product, { name: product, check: false });
             }),
             validationInput: true,
-            setValidationInput: jest.fn(),
-            crossOut: jest.fn(),
-        })),
+            setValidationInput: vi.fn(),
+            crossOut: vi.fn(),
+        }),
     };
 });
 
 describe('Layout component', () => {
-    test('user can add a product', async () => {
+    it('user can add a product', async () => {
         const user = userEvent.setup();
-        const { useProducts } = require('../hooks/useProduct');
         const { productMap } = useProducts();
 
         render(<Layout />);
@@ -47,23 +46,23 @@ describe('Layout component', () => {
         });
     });
 
-    test('user can delete all products', async () => {
+    it('user can delete all products', async () => {
         const user = userEvent.setup();
-        const { useProducts } = require('../hooks/useProduct');
 
         render(<Layout />);
 
         const { productMap, deleteAll } = useProducts();
-        const deleteButton = screen.getByText(/Delete All/i) as HTMLButtonElement;
+        const deleteButtons = screen.getAllByRole('button', { name: /Delete All/i });
+        const deleteButton = deleteButtons[0]; 
 
-        productMap.set('1', {name: 'Test Product One', check: false});
-        productMap.set('2', {name: 'Test Product Two', check: false});
+
+        productMap.set('1', { name: 'Test Product One', check: false });
+        productMap.set('2', { name: 'Test Product Two', check: false });
 
         await user.click(deleteButton);
 
         await waitFor(() => {
             expect(productMap.size).toBe(0);
         });
-
     });
 });

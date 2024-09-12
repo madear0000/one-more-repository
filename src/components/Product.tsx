@@ -27,7 +27,7 @@ const Product: React.FC<ProductProps> = ({ value, onDelete, onToggle, isBought }
         <Card>
             <CardBody>
                 <div className="flex justify-between items-center">
-                    <p style={{textDecoration: isBought ? 'line-through' : ''}}>{value}</p>
+                    <span style={{textDecoration: isBought ? 'line-through' : ''}}>{value}</span>
                     <div>
                         <Button onClick={handleToggleStrikeThrough} size="sm" color="success" variant="flat" data-testid="toggle-button">
                             <FontAwesomeIcon icon={faCheck} /> 
